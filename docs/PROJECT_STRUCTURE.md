@@ -110,6 +110,7 @@ flowchart TD
 
 ---
 
-## 3. Hinweis zu bestehendem Vorentwurf (`packages/simulation-core`)
+## 3. Hinweis zur Bereinigung des Vorentwurfs
 
-Auf dem nicht gemergten Branch `feat/core-engine-scaffold` existiert ein früher Prototyp (`packages/simulation-core` + `packages/shared-types`). In **Phase 06 (Project Scaffolding)** werden diese Entwurfsdateien kontrolliert in die nun definierte Paketstruktur (`packages/economy-engine` + `packages/game-engine` + `packages/shared-types`) überführt bzw. bereinigt, sodass keine verwaisten Module verbleiben.
+Ein früher, nicht gemergter Vorentwurf (`packages/simulation-core` auf `feat/core-engine-scaffold`) wurde im Rahmen von Phase 06 (Security & Quality Gate) bereinigt, damit Phase 07 sauber auf der spezifizierten Zielstruktur (`packages/economy-engine`, `packages/game-engine`, `packages/progression-system`, `packages/shared-types`) aufsetzt.
+

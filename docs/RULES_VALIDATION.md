@@ -43,8 +43,8 @@ Gemäß der offiziellen Spezifikation des Antigravity Customization Systems (`ag
 | `documentation.md` | TSDoc, Architecture Decision Records (ADRs)| 780 Bytes | **PASS** | Valid Markdown |
 
 ### C. Redundanz & Deduplikation
-- Alle 13 Regeln wurden synchron in `.agents/rules/` und `.agent/rules/` bereitgestellt, um volle Kompatibilität mit allen Antigravity-Parsern (Singular- und Plural-Konvention) sicherzustellen.
-- Die Antigravity-Deduplikations-Engine stellt sicher, dass identisch aufgelöste Pfade nur einmal in den Token-Kontext geladen werden.
+- In Phase 06 wurde der in Phase 03 angelegte redundante Spiegel `.agent/rules/` zugunsten einer einzigen kanonischen Quelle (`.agents/rules/`, gemäß offizieller Antigravity-Spezifikation) entfernt, um DRY-Konformität (`AGENTS.md` #4) sicherzustellen und abweichende Zeilenenden (CRLF/LF) auszuschließen.
+- Root-Einstiegspunkte (`AGENTS.md`, `GEMINI.md`) sowie die 19 Workspace-Skills unter `.agent/skills/` bleiben aktiv und überschneidungsfrei.
 
 ---
 

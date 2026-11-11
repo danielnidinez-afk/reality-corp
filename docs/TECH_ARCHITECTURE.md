@@ -60,11 +60,11 @@ Alle 20 geforderten Spielsysteme sind strikt den definierten Monorepo-Modulen zu
 | 10 | **Offline Progress** | `economy-engine` | Zeigt "Welcome Back"-Modal mit geschätztem Ertrag | Berechnet autoritativen $\Delta t$-Ertrag (Cap + Clock Sanity) |
 | 11 | **Missions** | `progression-system` | Trackt Fortschritt gegen aktuelle Meilensteine | Verhindert Doppelbelohnung via `reward_claims` Unique Key |
 | 12 | **Daily Challenges** | `progression-system` | Zeigt tagesaktuelle UTC-Aufgaben und Restzeit | Generiert tagesdeterministische Challenges; prüft Claim-Fenster |
-| 13 | **Focus Timer** | `game-engine` | Lokal laufender Pomodoro-/Deep-Work-Timer (kein Internet nötig) | Validiert `started_at` vs. `completed_at` Mindestdauer beim Sync |
-| 14 | **Reality Sync** | `reality-sync` | Persistiert Savegame + Command-Queue in IndexedDB | Nimmt Batches an, erkennt Konflikte, liefert `canonicalState` |
-| 15 | **Player Profiles** | `backend` / `shared-types` | Anzeige von Name, Trust-Status, gewählter Welt | Verwaltet Profil über Supabase Auth + RLS (`auth.uid()`) |
+| 13 | **Focus Timer** | `game-engine` | Lokal laufender Timer (offline unboosted nutzbar) | Server-validierte Boosts verlangen Online-Start (`focus/start`) & Mindestdauer |
+| 14 | **Reality Sync** | `reality-sync` | Persistiert Savegame + Command-Queue in IndexedDB | Prüft `baseStateVersion` (409 bei Divergenz), Replay, liefert `canonicalState` |
+| 15 | **Player Profiles** | `backend` / `shared-types` | Anzeige von Name, Trust-Status, gewählter Welt | Verwaltet Profil über Supabase Auth + RLS (`(SELECT auth.uid())`) + DSGVO-Delete |
 | 16 | **Achievements** | `progression-system` | Schaltet lokale Trophäen-Popups frei | Speichert dauerhafte Achievements idempotent in Postgres |
-| 17 | **Guilds** | `backend` | Anzeige von Syndikat-Mitgliedern & passiven Gilden-Perks | Verwaltet Mitgliedschaften & Perks über Postgres-Transaktionen |
+| 17 | **Guilds** | `backend` | Phase-2 Rollout (Schema/API vorbereitet, UI via Feature-Flag) | Verwaltet Mitgliedschaften & Perks über Postgres-Transaktionen |
 | 18 | **Leaderboards** | `backend` | Paginierte Ranglisten-Ansicht nach Welt/Season | Indizierte Abfrage; filtert `trust_status = 'verified'` |
 | 19 | **Events** | `game-config` / `backend` | Aktiviert temporäre Multiplikatoren/Event-Banners | Steuert globale UTC-Start-/Endzeiten über Admin-Dashboard |
 | 20 | **Analytics** | `reality-sync` / `backend` | Puffert anonyme Funnel-/TTNM-Events lokal im Batch | Schreibt Events asynchron in `analytics_events` ohne PII |
@@ -127,3 +127,4 @@ sequenceDiagram
 3. **Capacitor 8 Mobile Shell:**
    - SvelteKit baut per `@sveltejs/adapter-static` (`fallback: 'index.html'`) ein reines SPA-Bundle nach `build/`.
    - Native Bridges (`@capacitor/haptics`, `@capacitor/app`, Safe-Area-Insets) werden ausschließlich hinter `Capacitor.isNativePlatform()`-Guards aufgerufen.
+

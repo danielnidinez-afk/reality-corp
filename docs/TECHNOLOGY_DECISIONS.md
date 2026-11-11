@@ -75,3 +75,30 @@ Jede Komponente des Stacks wurde gegen unsere lokale Laufzeitumgebung (**Node.js
 ### DEC-07: Single-World MVP (`Apex Syndicate`) mit Multi-World-Datenmodell
 - **Entscheidung:** Jede Tabelle, Config und Engine-Funktion führt explizit eine `world_id` (`'apex-syndicate' | 'chrono-forge' | 'sovereign-island'`), doch im MVP ist ausschließlich `apex-syndicate` freigeschaltet und mit Content bestückt.
 - **Begründung:** Verhindert kostspielige Datenbank- und Savegame-Migrationen beim späteren Launch von Welt 2 (*Chrono Forge*) und Welt 3 (*Sovereign Island*), ohne den MVP-Zeitplan mit unfertigem Content zu belasten.
+
+### DEC-08: HTTP-Framework in `apps/backend` (`Fastify v5`)
+- **Entscheidung:** Einsatz von **Fastify v5** mit `fastify-type-provider-zod` und `@fastify/rate-limit` auf Node.js 24 LTS.
+- **Begründung:** Hohe Durchsatz-Performance, erstklassige TypeScript-/Zod-Schema-Integration für Request/Response-Verträge sowie ausgereiftes Rate-Limiting und Plugin-System ohne Microservice-Overhead.
+- **Geprüfte Alternativen:** *Express* (veraltete Async-Fehlerbehandlung, geringerer Durchsatz), *Hono* (primär für Edge-Runtimes optimiert, geringere Reife für tiefen Node.js-Monolithen).
+
+### DEC-09: Einheitliche Zod-Version (`zod ^3.24.2`)
+- **Entscheidung:** Strikte Festlegung auf **`zod ^3.24.2`** als einheitliche Major-Version über alle `apps/*` und `packages/*`.
+- **Begründung:** Vermeidet TypeScript-Typinkompatibilitäten (`TS2589`) durch gemischte Zod-v3/v4-Bäume und garantiert volle Kompatibilität mit `fastify-type-provider-zod` und Supabase-Tooling. Ein späterer Monorepo-Upgrade auf Zod v4 erfolgt geschlossen in einem separaten PR.
+
+### DEC-10: Schlanke Custom-Svelte-5-Komponenten in `packages/ui-components`
+- **Entscheidung:** Eigenbau modularer Svelte 5 + Tailwind CSS v4 UI-Primitiven (mit verpflichtenden $48\text{px}$ Touch-Targets und ARIA-Rollen) ohne externe headless UI-Bibliothek im MVP.
+- **Begründung:** Minimiert das initiale JavaScript-Bundle ($\le 350\text{KB}$-Ziel), vermeidet Breaking-Changes durch externe Runes-Wraps und sichert volle Kontrolle über Tycoon-spezifische Zahlenanzeigen.
+- **Geprüfte Alternativen:** *Bits UI / Melt UI* (erst bei späteren komplexen Popover-/Combobox-Bedarfen nachrüsten).
+
+### DEC-11: Native Web Audio API Wrapper statt Howler.js
+- **Entscheidung:** Schlanker In-House-Sound-Manager auf Basis der nativen Web Audio API (inkl. Lazy-Unlock beim ersten Tap, Click-Throttling und Silent-Mode-Respekt).
+- **Begründung:** Spart unnötige Drittanbieter-Abhängigkeiten (`AGENTS.md` #3), liefert $0\text{ KB}$ Extra-Bundle-Overhead und erlaubt präzise Drosselung bei schnellen Tycoon-Klicks.
+
+### DEC-12: Big-Number-Obergrenze mit `break_infinity.js` bestätigt
+- **Entscheidung:** Bestätigung von `break_infinity.js` (Wertebereich bis $10^{9 \times 10^{15}}$) hinter dem `BigVal`-Adapter für alle drei Welten (*Apex Syndicate*, *Chrono Forge*, *Sovereign Island*).
+- **Begründung:** Deckt ein mehrjähriges Tycoon-Balancing vollständig ab ohne den Layer-Overhead von `break_eternity.js`. Bei Bedarf erlaubt die Adapter-Kapselung einen verlustfreien Austausch.
+
+### DEC-13: Phasenweiser MVP-Rollout (`Apex Syndicate` Core First)
+- **Entscheidung:** Das erste produktive MVP fokussiert auf **Apex Syndicate** inklusive Core-Loop, Offline/Reality Sync, Profilen, Missions, Daily Challenges, Achievements, Focus Timer und Leaderboards. **Guilds** und das **Admin Dashboard** werden architektonisch/schemaseitig vorbereitet, aber hinter Feature-Flags für Rollout-Welle 2 gestaffelt.
+- **Begründung:** Verhindert Scope Creep und garantiert kompromisslose Qualität, Sicherheit und Balance im Kernspiel vor Freischaltung sozialer Gruppen-Features.
+

@@ -65,11 +65,12 @@ Synchronisiert lokal ausgeführte Commands (aus Online- oder Offline-Phasen) und
     ]
   }
   ```
-- **Server-Logik:**
-  1. Prüft Zeitdelta $\Delta t = \text{serverNow} - \text{last\_server\_tick\_at}$ (begrenzt durch `MaxOfflineCap`, lehnt negative `clientTimestampMs` oder Zeitreisen ab).
-  2. Wendet Offline-Fortschritt mit `@reality-corp/economy-engine` an.
-  3. Spielt alle neuen `commands` (`seq > last_synced_seq`) deterministisch über `@reality-corp/game-engine` ab.
-  4. Speichert neuen Zustand atomar in `player_world_states` + `economy_transactions`.
+- **Server-Logik (inkl. Multi-Device-Divergenz-Schutz):**
+  1. **Optimistic Concurrency Check:** Vergleicht `baseStateVersion` mit `player_world_states.state_version`. Bei Abweichung (z. B. Parallelspiel auf zwei Offline-Geräten) antwortet der Server sofort mit `409 CONFLICT_STATE_DIVERGENCE` und liefert `canonicalState` zur sauberen Client-Synchronisation.
+  2. Prüft Zeitdelta $\Delta t = \text{serverNow} - \text{last\_server\_tick\_at}$ (begrenzt durch `MaxOfflineCap`, lehnt negative `clientTimestampMs` oder Zeitreisen ab).
+  3. Wendet Offline-Fortschritt mit `@reality-corp/economy-engine` an.
+  4. Spielt alle neuen `commands` (`seq > last_synced_seq`) deterministisch über `@reality-corp/game-engine` ab.
+  5. Speichert neuen Zustand atomar (erhöht `state_version`) in `player_world_states` + `economy_transactions`.
 - **Response (`200 OK`):**
   ```json
   {
@@ -104,6 +105,8 @@ Synchronisiert lokal ausgeführte Commands (aus Online- oder Offline-Phasen) und
 ---
 
 ### 3.4 Focus Timer
+- **Offline vs. Ranked Boost Regel:** Lokal im Flugmodus läuft der Focus Timer als unboosteter Produktivitäts-Timer (kein Manipulationsrisiko). Ein **server-validierter Compute-Boost** erfordert zwingend den Start über `POST /v1/focus/start` bei aktiver Internetverbindung.
+
 #### `POST /v1/focus/start`
 - **Body:** `{ "worldId": "apex-syndicate", "targetDurationSec": 1500 }` (25 Min.)
 - **Response:** `{ "sessionId": "<uuid>", "startedAt": "2026-11-11T01:00:00Z" }`
@@ -119,12 +122,13 @@ Synchronisiert lokal ausgeführte Commands (aus Online- oder Offline-Phasen) und
 | :--- | :--- | :--- |
 | `GET /v1/profile/me` | Eigenes Profil + freigeschaltete Welten laden | `authenticated` |
 | `PATCH /v1/profile/me` | Username / aktive Welt wechseln | `authenticated` + Zod Length/Profanity Check |
+| `DELETE /v1/profile/me` | DSGVO-Kontolöschung (`auth.users` Cascade) | `authenticated` + explizite Bestätigung |
 | `GET /v1/leaderboards/:worldId` | Top-Spieler & eigener Rang (`?season=global&limit=50`) | `authenticated`; filtert `is_verified = true` |
-| `POST /v1/guilds` | Neues Syndikat gründen (Kostenprüfung serverseitig) | `authenticated` + `X-Idempotency-Key` |
-| `POST /v1/guilds/:id/join` | Syndikat beitreten (prüft `max_members` & 1-Guild-Limit) | `authenticated` |
-| `POST /v1/guilds/:id/leave` | Syndikat verlassen | `authenticated` |
+| `POST /v1/guilds` | Neues Syndikat gründen (Phase-2 Feature-Flag) | `authenticated` + `X-Idempotency-Key` |
+| `POST /v1/guilds/:id/join` | Syndikat beitreten (Phase-2; prüft `max_members` & 1-Guild-Limit) | `authenticated` |
+| `POST /v1/guilds/:id/leave` | Syndikat verlassen (Phase-2) | `authenticated` |
 | `GET /v1/events/active/:worldId` | Aktive globale Events & Multiplikatoren | Öffentlich / `authenticated` (gecached) |
-| `POST /v1/analytics/batch` | Anonyme Telemetry-Events einliefern (max. 50 pro Batch) | `authenticated` / Session-ID |
+| `POST /v1/analytics/batch` | Anonyme Telemetry-Events einliefern (max. 50 pro Batch) | `authenticated` + Payload-Größenlimit (64 KB) |
 
 ---
 
@@ -134,3 +138,4 @@ Ausschließlich zugänglich für Nutzer mit `player_profiles.role === 'admin'` (
 - `POST /v1/admin/users/:id/trust` – Verifizieren oder Sperren auffälliger Leaderboard-Profile.
 - `POST /v1/admin/events` – Zeitgesteuerte Live-Events anlegen/deaktivieren (`game_events`).
 - `GET /v1/admin/telemetry/summary` – Aggregierte Economy-Gesundheit (Sink/Source Ratios, Median TTNM).
+

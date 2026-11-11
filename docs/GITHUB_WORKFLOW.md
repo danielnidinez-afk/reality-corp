@@ -52,7 +52,7 @@ Die kontinuierliche Integrations-Pipeline führt bei jedem Push und PR auf `main
 1. **`typecheck_and_lint`:** Führt `pnpm check` (Svelte/TypeScript) und Linter aus.
 2. **`unit_tests`:** Führt die Vitest-Suite mit Fake-Timers aus.
 3. **`build_verification`:** Verifiziert die Erstellung der Produktions-Bundles.
-4. **`security_audit`:** Scannt Abhängigkeiten auf bekannte Sicherheitslücken (`npm audit`).
+4. **`security_audit`:** Scannt Abhängigkeiten auf bekannte Sicherheitslücken (`pnpm audit --audit-level=high`).
 
 ---
 

@@ -135,27 +135,35 @@ erDiagram
 
 ---
 
-## 4. Atomare Transaktionen & Connection Pooling
+## 4. Atomare Transaktionen, RPC-Härtung & Datenschutz (DSGVO)
 
-- **Atomare RPCs:** Zustandsänderungen (z. B. `prestige_reset`, `claim_reward`, `sync_world_batch`) werden als PostgreSQL PL/pgSQL-Funktionen (`SECURITY DEFINER` mit explizitem `SET search_path = public`) oder innerhalb expliziter SQL-Transaktionen (`BEGIN ... COMMIT`) ausgeführt, sodass Guthaben-Update, Ledger-Eintrag und Claim-Sperre niemals auseinanderlaufen.
+- **Atomare RPCs & Execute-Lockdown:** Zustandsänderungen (z. B. `prestige_reset`, `claim_reward`, `sync_world_batch`) werden als PostgreSQL PL/pgSQL-Funktionen (`SECURITY DEFINER` mit explizitem `SET search_path = public`) ausgeführt. Um direkten PostgREST-Missbrauch zu verhindern, gilt zwingend:
+  ```sql
+  REVOKE EXECUTE ON FUNCTION sync_world_batch FROM PUBLIC, anon, authenticated;
+  GRANT EXECUTE ON FUNCTION sync_world_batch TO service_role;
+  ```
 - **Connection Pooling:** `apps/backend` verbindet über den Supabase **Supavisor Pooler im Transaction Mode** (Port 6543) für skalierbare Parallelanfragen ohne Erschöpfung des Connection-Limits.
+- **Datenschutz & Aufbewahrung:** `DELETE /v1/profile/me` löscht den Auth-Nutzer (`auth.users`), was per `ON DELETE CASCADE` sämtliche Spielstände, Claims und Profil-PII entfernt. `analytics_events` speichert keine IP-Adressen oder User-IDs und unterliegt einer 90-Tage-Retention; `audit_anomaly_logs` wird nach 180 Tagen anonymisiert/bereinigt.
 
 ---
 
-## 5. Beispielhafte RLS-Policies (Performance-optimiert)
+## 5. Beispielhafte RLS-Policies (Performance-optimiert & Safe)
 
 ```sql
 ALTER TABLE player_world_states ENABLE ROW LEVEL SECURITY;
 
--- Spieler dürfen nur ihre eigenen Weltenstände lesen
+-- Spieler dürfen nur ihre eigenen Weltenstände lesen (Subquery-Wrapping für O(1)-Auth-Check)
 CREATE POLICY "Read own world states"
 ON player_world_states FOR SELECT
 TO authenticated
 USING ((SELECT auth.uid()) = user_id);
 
--- Direkte Schreibzugriffe vom Client-SDK sind verboten; Updates laufen ausschließlich über apps/backend!
-CREATE POLICY "Deny direct client writes"
-ON player_world_states FOR ALL
+-- Da keine permissive INSERT/UPDATE/DELETE Policy existiert, sind Client-Schreibzugriffe implizit gesperrt.
+-- Zusätzlich erzwingt eine RESTRICTIVE Policy den Schreibschutz auch bei künftigen Policies:
+CREATE POLICY "Restrict direct client writes"
+ON player_world_states AS RESTRICTIVE FOR ALL
 TO anon, authenticated
+USING (true)
 WITH CHECK (false);
 ```
+
