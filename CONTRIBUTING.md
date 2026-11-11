@@ -62,3 +62,4 @@ Zulässige Typen:
 - Keine direkten Mutationen auf dem Simulation Core State aus UI-Komponenten heraus.
 - Keine unkomprimierten Bild- oder Audio-Dateien im Git einchecken.
 - Keine Secrets oder `.env`-Dateien committen.
+

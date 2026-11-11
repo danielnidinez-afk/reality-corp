@@ -26,7 +26,7 @@ Lade diesen Skill, wenn:
    $$\text{Cost}(n) = \text{BaseCost} \times (\text{GrowthRate})^n$$
    wobei $\text{GrowthRate}$ typischerweise zwischen $1.07$ und $1.15$ für Basiseinheiten liegt.
 3. **Sink-to-Source Ratio Analyse:** Sicherstellen, dass jede Produktionsstufe einen kontinuierlichen oder zyklischen Sink besitzt, um eine Entwertung früherer Errungenschaften zu verhindern.
-4. **Number-Precision-Check:** Bei Werten $> 10^{15}$ immer `Decimal.js` oder `break_infinity.js` Abstraktionen verwenden, niemals native JS `Number` Fließkomma-Additionen für Akkumulationen nutzen.
+4. **Number-Precision-Check:** Immer den `BigVal`-Adapter (`break_infinity.js` in `packages/economy-engine`) verwenden, niemals native JS `Number` Fließkomma-Additionen oder langsames `Decimal.js` im Tick-Loop nutzen.
 5. **Simulationslauf:** Verifikation über eine stochastische oder deterministische 24h- / 7-Tage-Simulation (Monte Carlo oder diskrete Zeitschritte).
 
 ## 4. Qualitätskriterien
@@ -47,7 +47,7 @@ Lade diesen Skill, wenn:
 - [ ] Gibt es automatisierte Tests für Grenzfälle ($0$, $1$, $\text{MAX\_SAFE\_INTEGER}$, $\infty$)?
 
 ## 7. Konkrete Projektregeln für REALITY CORP
-- Alle monetären und rechnerischen Währungen werden im Shared-Types-Paket als strikte Branded Types deklariert (z.B. `type RealityCash = Brand<Decimal, 'RealityCash'>`).
+- Alle monetären und rechnerischen Währungen werden in `packages/shared-types` als strikte Branded Types auf Basis von `BigVal` deklariert (z.B. `type RealityCash = Brand<BigVal, 'RealityCash'>`).
 - Keine direkten Mutationen auf dem Player-State ohne Event-Dispatching für das Audit-Log.
 - Jede neue Technologie im Forschungsbaum muss eine mathematische Amortisationszeit (Break-Even-Point) zwischen 15 Minuten und 4 Stunden aufweisen.
 

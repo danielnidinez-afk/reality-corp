@@ -24,3 +24,4 @@ assignees: []
 ### 📋 Akzeptanzkriterien
 - [ ] Kriterium 1
 - [ ] Kriterium 2
+

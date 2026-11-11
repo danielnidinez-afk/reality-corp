@@ -22,35 +22,35 @@ Gemäß der offiziellen Spezifikation des Antigravity Customization Systems (`ag
 ### A. Root-Regeln
 | Datei | Pfad | Größe (Bytes) | 24k Limit Status | Syntaktische Prüfung |
 | :--- | :--- | :--- | :--- | :--- |
-| **`AGENTS.md`** | `/AGENTS.md` | 4.911 Bytes | **PASS** (20.4 % des Limits) | Markdown konform, UTF-8 |
-| **`GEMINI.md`** | `/GEMINI.md` | 682 Bytes | **PASS** (2.8 % des Limits) | Markdown konform, UTF-8 |
+| **`AGENTS.md`** | `/AGENTS.md` | 4.912 Bytes | **PASS** (20.5 % des Limits) | Markdown konform, UTF-8 |
+| **`GEMINI.md`** | `/GEMINI.md` | 696 Bytes | **PASS** (2.9 % des Limits) | Markdown konform, UTF-8 |
 
 ### B. Spezialisierte Workspace-Regeln (`.agents/rules/`)
 | Regeldatei | Thema | Größe (Bytes) | 24k Limit Status | Syntaktische Prüfung |
 | :--- | :--- | :--- | :--- | :--- |
-| `architecture.md` | 3-Schichten-Entkopplung, Command-Pattern | 1.807 Bytes | **PASS** | Valid Markdown |
-| `typescript.md` | Striktes TS, Branded Types, Verbot von `any` | 1.550 Bytes | **PASS** | Valid Markdown |
-| `frontend-design.md`| Svelte 5 Runes, Atomic Components | 1.653 Bytes | **PASS** | Valid Markdown |
-| `game-economy.md` | Sinks/Sources, Big-Number-Math | 1.623 Bytes | **PASS** | Valid Markdown KaTeX |
-| `backend-security.md`| Zero-Trust RLS, Anti-Cheat, Secret Hygiene | 1.420 Bytes | **PASS** | Valid Markdown SQL |
-| `database.md` | Hybrid Relational/JSONB, Indizierung | 1.438 Bytes | **PASS** | Valid Markdown SQL |
-| `performance.md` | 16.6ms Frame-Budget, Object-Pools, Vitals | 1.347 Bytes | **PASS** | Valid Markdown |
-| `testing.md` | Vitest-Pyramide, Zero-Flake Fake Timers | 1.250 Bytes | **PASS** | Valid Markdown |
-| `mobile-development.md` | 48px Targets, Safe-Areas, Haptics | 1.148 Bytes | **PASS** | Valid Markdown |
-| `github-workflow.md`| Conventional Commits, Trunk Safety | 987 Bytes | **PASS** | Valid Markdown |
-| `ai-agent-policy.md` | Rollengrenzen, Fakten-Disziplin | 1.204 Bytes | **PASS** | Valid Markdown |
-| `code-quality.md` | Max. 300 Zeilen/Datei, Clean Code | 812 Bytes | **PASS** | Valid Markdown |
-| `documentation.md` | TSDoc, Architecture Decision Records (ADRs)| 780 Bytes | **PASS** | Valid Markdown |
+| `architecture.md` | Entkopplung, Monorepo-Module, Command-Pattern | 2.015 Bytes | **PASS** | Valid Markdown |
+| `typescript.md` | Striktes TS, Branded Types (`BigVal`), Verbot von `any` | 1.816 Bytes | **PASS** | Valid Markdown |
+| `frontend-design.md`| Svelte 5 Runes, Atomic Components | 1.654 Bytes | **PASS** | Valid Markdown |
+| `game-economy.md` | 5 Ressourcen-Ebenen, `break_infinity.js` (`BigVal`) | 1.779 Bytes | **PASS** | Valid Markdown KaTeX |
+| `backend-security.md`| `AS RESTRICTIVE` RLS, RPC-Lockdown, Secret Hygiene | 1.882 Bytes | **PASS** | Valid Markdown SQL |
+| `database.md` | Hybrid Relational/JSONB, Indizierung | 1.439 Bytes | **PASS** | Valid Markdown SQL |
+| `performance.md` | 16.6ms Frame-Budget, Object-Pools, Vitals | 1.348 Bytes | **PASS** | Valid Markdown |
+| `testing.md` | Vitest-Pyramide, Zero-Flake Fake Timers, `pnpm` | 1.245 Bytes | **PASS** | Valid Markdown |
+| `mobile-development.md` | 48px Targets, Safe-Areas, Haptics | 1.149 Bytes | **PASS** | Valid Markdown |
+| `github-workflow.md`| Conventional Commits, Trunk Safety | 988 Bytes | **PASS** | Valid Markdown |
+| `ai-agent-policy.md` | Rollengrenzen, Fakten-Disziplin | 1.205 Bytes | **PASS** | Valid Markdown |
+| `code-quality.md` | Max. 300 Zeilen/Datei, Clean Code | 813 Bytes | **PASS** | Valid Markdown |
+| `documentation.md` | TSDoc, Architecture Decision Records (ADRs)| 781 Bytes | **PASS** | Valid Markdown |
 
 ### C. Redundanz & Deduplikation
-- Alle 13 Regeln wurden synchron in `.agents/rules/` und `.agent/rules/` bereitgestellt, um volle Kompatibilität mit allen Antigravity-Parsern (Singular- und Plural-Konvention) sicherzustellen.
-- Die Antigravity-Deduplikations-Engine stellt sicher, dass identisch aufgelöste Pfade nur einmal in den Token-Kontext geladen werden.
+- In Phase 06 wurde der in Phase 03 angelegte redundante Spiegel `.agent/rules/` zugunsten einer einzigen kanonischen Quelle (`.agents/rules/`, gemäß offizieller Antigravity-Spezifikation) entfernt, um DRY-Konformität (`AGENTS.md` #4) sicherzustellen und abweichende Zeilenenden (CRLF/LF) auszuschließen.
+- Root-Einstiegspunkte (`AGENTS.md`, `GEMINI.md`) sowie die 19 Workspace-Skills unter `.agent/skills/` bleiben aktiv und überschneidungsfrei.
 
 ---
 
 ## 3. Gesamt-Token-Budget-Abschätzung
 
-- Gesamtgröße aller 13 spezialisierten Regeln: **ca. 17.420 Bytes** ($\approx 4.300$ Wörter / $\approx 5.500$ Tokens).
+- Gesamtgröße aller 13 spezialisierten Regeln: **18.114 Bytes** (inkl. `AGENTS.md` & `GEMINI.md`: **23.722 Bytes**; deutlich unter jedem Single-File- und Aggregat-Budget).
 - Die Regeln nutzen damit weniger als **28 %** des standardmäßigen 20.000-Token-Budgets aus.
 - **Ergebnis:** Kein Risiko von Rule-Demotions oder automatischen Kürzungsabschneidungen.
 

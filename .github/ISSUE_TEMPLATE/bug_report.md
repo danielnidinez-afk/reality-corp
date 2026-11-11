@@ -27,3 +27,4 @@ assignees: []
 
 ### 📋 Zusätzlicher Kontext / Screenshots
 <!-- Logs, Konsolen-Output oder Screenshots einfügen -->
+

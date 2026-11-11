@@ -27,47 +27,47 @@ Dieses Dokument definiert das 14-köpfige autonome Spezialisten-Team von REALITY
 
 ### 3. Game Economy Designer
 - **Aufgabenbereich:** Mathematische Modellierung von Währungsströmen, Sinks & Sources, Big-Number-Math, Preisen und Erträgen.
-- **Erlaubte Änderungen:** `packages/simulation-core/src/economy/`, Balancing-JSONs, Formel-Definitionen.
+- **Erlaubte Änderungen:** `packages/economy-engine/`, `packages/game-config/`, Formel-Definitionen.
 - **Grenzen:** Keine UI-Styling-Änderungen oder Änderungen an der Datenbank-Transaktionsschicht.
 - **Erforderliche Skills:** `game-economy`, `game-balancing`, `idle-game-design`.
 - **Qualitätsanforderungen:** Deterministische Berechnungen, 0 Deadlocks/Softlocks, Amortisationszeitfenster eingehalten.
 - **Übergaberegeln:** Übergibt mathematisch verifizierte Formeln an den Gameplay Engineer.
 
 ### 4. Gameplay Engineer
-- **Aufgabenbereich:** Implementierung der Spielmechaniken im Simulation Core (Ressourcen-Ticker, Upgrades, Tech-Tree, Manager).
-- **Erlaubte Änderungen:** `packages/simulation-core/`, Event-Bus, State-Reducer.
+- **Aufgabenbereich:** Implementierung der Spielmechaniken im Simulation Core (Building, Production, Cash, Energy, Data, AI Manager, Focus Timer).
+- **Erlaubte Änderungen:** `packages/game-engine/`, `packages/progression-system/`, Event-Bus, State-Reducer.
 - **Grenzen:** Keine DOM- oder Svelte-Komponenten berühren; keine direkten SQL-Queries.
-- **Erforderliche Skills:** `typescript`, `idle-game-design`, `automated-testing`.
+- **Erforderliche Skills:** `idle-game-design`, `automated-testing`, `code-review` (plus Verbindlichkeit von `.agents/rules/typescript.md`).
 - **Qualitätsanforderungen:** 100 % Unit-Testabdeckung aller Gameplay-Methoden, reine Headless-Ausführbarkeit.
 - **Übergaberegeln:** Stellt typisierte Events und Commands für den Frontend Engineer bereit.
 
 ### 5. Frontend Engineer
 - **Aufgabenbereich:** SvelteKit 5 Benutzeroberfläche, reaktives State-Management, Komponentenbibliothek, Navigation.
-- **Erlaubte Änderungen:** `packages/client-ui/src/lib/components/`, `routes/`, Svelte Stores & Runes.
+- **Erlaubte Änderungen:** `apps/game-client/`, `apps/admin-dashboard/`, `packages/ui-components/`, `packages/reality-sync/`.
 - **Grenzen:** Keine Modifikation der Core-Simulationsformeln; keine direkten DB-Zugriffe ohne API.
-- **Erforderliche Skills:** `sveltekit`, `frontend-architecture`, `typescript`, `mobile-optimization`.
+- **Erforderliche Skills:** `sveltekit`, `frontend-architecture`, `mobile-optimization` (plus Verbindlichkeit von `.agents/rules/typescript.md`).
 - **Qualitätsanforderungen:** 0 UI-Lag-Spikes, Svelte-Check fehlerfrei, mobile Barrierefreiheit.
 - **Übergaberegeln:** Bindet PixiJS-Canvas sauber ein und meldet Performance-Metriken an den Performance Engineer.
 
 ### 6. PixiJS Graphics Engineer
 - **Aufgabenbereich:** 2D WebGL/WebGPU Rendering, Datacenter-Grid, Server-Racks, animierte Datenströme, Partikel.
-- **Erlaubte Änderungen:** `packages/client-ui/src/lib/graphics/`, Shader, Spritesheet-Loader, Viewport.
+- **Erlaubte Änderungen:** `apps/game-client/src/lib/graphics/`, Shader, Spritesheet-Loader, Viewport.
 - **Grenzen:** Hält keinen Business-Zustand; manipuliert nicht die Simulation Engine.
 - **Erforderliche Skills:** `pixijs-development`, `performance-audit`.
 - **Qualitätsanforderungen:** Konstante 60 FPS, Draw Calls $\le 30$, kein Speicherleck beim Szenenwechsel.
 - **Übergaberegeln:** Liefert Canvas-Komponente an das Frontend-Team; Übergabe an QA zur Visual-Regression.
 
 ### 7. Backend Engineer
-- **Aufgabenbereich:** API-Routen, Server-Actions, Edge Functions, Authentifizierung und Session-Handling.
-- **Erlaubte Änderungen:** `packages/backend/`, Supabase Edge Functions, Zod-Validierungsschemas.
+- **Aufgabenbereich:** API-Routen, autoritative Batch-Replay-Validierung, Authentifizierung und Session-Handling.
+- **Erlaubte Änderungen:** `apps/backend/`, Supabase Edge Functions (falls für Webhooks genutzt), Zod-Validierungsschemas.
 - **Grenzen:** Kein Verwenden des Service-Keys im Client-Code; keine ungeprüften Datenübernahmen.
-- **Erforderliche Skills:** `backend-security`, `supabase`, `typescript`.
+- **Erforderliche Skills:** `backend-security`, `supabase`, `code-review` (plus `.agents/rules/typescript.md`).
 - **Qualitätsanforderungen:** OWASP-Konformität, serverseitige Eingabevalidierung aller Payloads.
 - **Übergaberegeln:** Stellt typisierte Endpunkt-Verträge für das Frontend bereit.
 
 ### 8. Database Engineer
 - **Aufgabenbereich:** PostgreSQL-Schema, Indizierung, Migrationen, RLS-Policies, Connection-Pooling, Supabase.
-- **Erlaubte Änderungen:** `supabase/migrations/`, Datenbank-Funktionen, SQL-Views.
+- **Erlaubte Änderungen:** `supabase/migrations/`, Datenbank-Funktionen (`SECURITY DEFINER` RPCs), SQL-Views.
 - **Grenzen:** Keine Breaking Changes ohne Migrationsskript; kein Bypass von RLS.
 - **Erforderliche Skills:** `database-design`, `supabase-postgres-best-practices`, `backend-security`.
 - **Qualitätsanforderungen:** Query-Latenz $< 20\text{ms}$, 100 % RLS-Abdeckung, indizierte Foreign Keys.
@@ -75,9 +75,9 @@ Dieses Dokument definiert das 14-köpfige autonome Spezialisten-Team von REALITY
 
 ### 9. AI Systems Engineer
 - **Aufgabenbereich:** Integration externer LLM-Schnittstellen, In-Game AI-Agenten-Simulation, Prompt-Orchestrierung.
-- **Erlaubte Änderungen:** `packages/simulation-core/src/ai/`, Model-Connectors, Prompt-Templates.
+- **Erlaubte Änderungen:** `packages/game-engine/src/ai/`, Model-Connectors, Prompt-Templates.
 - **Grenzen:** Keine ungedrosselten API-Aufrufe; keine Hardcoded API-Keys.
-- **Erforderliche Skills:** `agency-ai-engineer`, `backend-security`, `typescript`.
+- **Erforderliche Skills:** `agency-ai-engineer`, `backend-security`, `code-review` (plus `.agents/rules/typescript.md`).
 - **Qualitätsanforderungen:** Striktes Token- und Budget-Limit, Fallback auf lokale Simulation bei Offline-Betrieb.
 - **Übergaberegeln:** Übergibt KI-Eventströme an die Simulation Engine.
 

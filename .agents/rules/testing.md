@@ -16,8 +16,8 @@
 
 ## 3. Definition of Done für Pull Requests
 Ein PR gilt als testseitig abgeschlossen, wenn:
-1. `npm run check` fehlerfrei durchläuft.
-2. `npm run test` (Unit + Integration) mit 100 % Erfolgsquote besteht.
+1. `pnpm check` fehlerfrei durchläuft.
+2. `pnpm test` (Unit + Integration) mit 100 % Erfolgsquote besteht.
 3. Keine Regressionen in bestehenden Testsuiten auftreten.
 4. Alle neuen öffentlichen Schnittstellen mindestens einen positiven und zwei negative Testfälle besitzen.
 

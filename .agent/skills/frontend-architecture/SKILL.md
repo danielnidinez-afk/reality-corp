@@ -21,7 +21,7 @@ Lade diesen Skill, wenn:
 
 ## 3. Arbeitsablauf
 1. **Trennung von Engine und UI (Headless Core):**
-   - Die Tycoon-Simulation (`simulation-core`) existiert als reines TypeScript-Modul ohne DOM- oder Framework-Abhängigkeiten.
+   - Die Tycoon-Simulation (`packages/game-engine`, `packages/economy-engine`, `packages/progression-system`) existiert als reines TypeScript-Paket ohne DOM- oder Framework-Abhängigkeiten.
    - Das Frontend abonniert State-Updates der Engine in regelmäßigen Zyklen (z.B. 10–20 Hz für UI-Zahlen, unabhängig von 60 Hz Render-Ticks).
 2. **Svelte 5 Runes & Reaktivität:**
    - Verwende `$state` für mutable reaktive Felder.
@@ -54,7 +54,7 @@ Lade diesen Skill, wenn:
 
 ## 6. Prüfschritte
 - [ ] Werden alle Tycoon-Zahlen über zentrale Formatierer dargestellt (z.B. `formatCurrency(amount)`)?
-- [ ] Besteht `npm run check` (Svelte-Check) ohne Warnungen und Typfehler?
+- [ ] Besteht `pnpm check` (Svelte-Check) ohne Warnungen und Typfehler?
 - [ ] Sind alle UI-Texte und Labels für Lokalisierung (i18n) vorbereitet?
 
 ## 7. Konkrete Projektregeln für REALITY CORP

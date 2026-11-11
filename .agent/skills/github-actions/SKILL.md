@@ -36,5 +36,5 @@ Dieser Skill definiert Vorlagen, Sicherheitsregeln und Performance-Tuning für k
 
 ## 3. Typische Fehler & Anti-Patterns
 - **Unbegrenzte Timeouts:** Fehlendes `timeout-minutes: 15`, wodurch hängende Prozesse die CI-Runner-Minuten aufbrauchen.
-- **Redundantes Bauen:** Wiederholtes Ausführen von `npm run build` in separaten Jobs statt Verwendung von Build-Artefakten (`actions/upload-artifact`).
+- **Redundantes Bauen:** Wiederholtes Ausführen von `pnpm build` in separaten Jobs statt Verwendung von Build-Artefakten (`actions/upload-artifact`).
 

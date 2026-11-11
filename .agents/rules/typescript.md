@@ -17,11 +17,16 @@
 ## 3. Branded Types für Währungen & Zeiteinheiten
 Zur Vermeidung von Rechenfehlern zwischen unterschiedlichen Einheiten sind Branded Types Pflicht:
 ```typescript
+import type { BigVal } from '@reality-corp/economy-engine'; // Wrapper über break_infinity.js (DEC-04)
+
 declare const __brand: unique symbol;
 export type Brand<T, B> = T & { readonly [__brand]: B };
 
-export type RealityCash = Brand<Decimal, 'RealityCash'>;
-export type ComputeFlops = Brand<Decimal, 'ComputeFlops'>;
+export type RealityCash = Brand<BigVal, 'RealityCash'>;
+export type ComputeFlops = Brand<BigVal, 'ComputeFlops'>;
+export type EnergyKw = Brand<BigVal, 'EnergyKw'>;
+export type DataShards = Brand<BigVal, 'DataShards'>;
+export type EquityShares = Brand<BigVal, 'EquityShares'>;
 export type GameTick = Brand<number, 'GameTick'>;
 export type TimestampMs = Brand<number, 'TimestampMs'>;
 ```

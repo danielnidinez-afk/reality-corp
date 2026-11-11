@@ -24,7 +24,7 @@ flowchart TD
 ### Stufe 1: Vollständig Autonom (Agenten-Ebene)
 - Untersuchen der Arbeitsumgebung und Quellcodedateien.
 - Erstellen von Modulcode, Typdefinitionen und Tests.
-- Ausführen lokaler Testsuiten (`npm run test`, `npx vitest`, `npm run lint`).
+- Ausführen lokaler Testsuiten (`pnpm test`, `pnpm exec vitest`, `pnpm lint`).
 - Aktualisieren der Dokumentation im `docs/`-Verzeichnis.
 
 ### Stufe 2: Review-Pflichtig (Inter-Agenten-Review)
@@ -40,7 +40,7 @@ flowchart TD
 ### Stufe 4: Menschliche Freigabe erforderlich (Mensch-in-the-Loop)
 - Jede Interaktion mit Produktionsdatenbanken oder externen Cloud-Ressourcen.
 - Ausführen destruktiver Datei- oder Systembefehle (`rm -rf`, `DROP TABLE`, `git reset --hard`).
-- Veröffentlichen oder Pushen von Code in öffentliche Repositories.
+- Veröffentlichen oder Pushen von Code in externe oder öffentliche Remote-Repositories.
 - Einpflegen oder Verwenden von API-Keys und sensiblen Anmeldedaten.
 
 ---
