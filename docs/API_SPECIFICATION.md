@@ -113,7 +113,7 @@ Synchronisiert lokal ausgeführte Commands (aus Online- oder Offline-Phasen) und
 
 #### `POST /v1/focus/complete`
 - **Body:** `{ "sessionId": "<uuid>" }`
-- **Server-Logik:** Verifiziert `(serverNow - started_at) >= target_duration_sec * 0.95` (5 % Toleranz für Uhrzeit-Jitter). Gewährt Fokus-Compute-Boost nur bei valider Mindestdauer; markiert Session als `completed`.
+- **Server-Logik:** Verifiziert atomar über bedingtes SQL-Update (`WHERE id = $1 AND user_id = $2 AND status = 'active'`), dass jede Session maximal einmal abgeschlossen wird (`409 ALREADY_CLAIMED` bei parallelen Requests), und prüft `(serverNow - started_at) >= target_duration_sec * 0.95` (5 % Toleranz für Uhrzeit-Jitter). Gewährt Fokus-Compute-Boost nur bei valider Mindestdauer; markiert Session als `completed`.
 
 ---
 

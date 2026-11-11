@@ -11,18 +11,18 @@
 - [ ] 🔧 Konfiguration / CI (`chore`)
 
 ## 🔍 Betroffene Komponenten
-- [ ] `packages/simulation-core` (Tycoon-Logik, Ökonomie, Ticker)
-- [ ] `packages/client-ui` (SvelteKit UI, Pages, Modals)
-- [ ] `packages/client-ui/graphics` (PixiJS Canvas, Rendering)
-- [ ] `packages/backend` / Supabase (Datenbank, RLS, Edge Functions)
-- [ ] `packages/shared-types` (Gemeinsame Typen & Interfaces)
+- [ ] `packages/economy-engine` / `packages/game-engine` / `packages/progression-system` (Core-Simulation & Ökonomie)
+- [ ] `packages/game-config` / `packages/shared-types` (Balance-Daten, Branded Types, Zod-Schemas)
+- [ ] `packages/reality-sync` / `packages/ui-components` (IndexedDB Sync & UI-Primitiven)
+- [ ] `apps/game-client` / `apps/admin-dashboard` (SvelteKit UI, PixiJS Canvas, Capacitor)
+- [ ] `apps/backend` / `supabase/` (Fastify API, PostgreSQL Migrationen, RLS & RPCs)
 - [ ] Dokumentation & Tooling
 
 ## 🧪 Nachweis der Tests
 <!-- Wie wurden die Änderungen verifiziert? Unit-Tests, Benchmarks, E2E-Screenshots -->
-- [ ] Unit-Tests hinzugefügt und lokal bestanden (`npm run test`)
-- [ ] TypeScript Check ohne Fehler (`npm run check`)
-- [ ] Linter ohne Fehler (`npm run lint`)
+- [ ] Unit-Tests hinzugefügt und lokal bestanden (`pnpm test`)
+- [ ] TypeScript Check ohne Fehler (`pnpm check`)
+- [ ] Linter ohne Fehler (`pnpm lint`)
 - [ ] Kein Performance-Rückgang im Frame-Budget (60 FPS stabil)
 
 ## 🛡️ Sicherheits- & Architekturprüfung

@@ -37,7 +37,7 @@ Dieses Dokument definiert das 14-köpfige autonome Spezialisten-Team von REALITY
 - **Aufgabenbereich:** Implementierung der Spielmechaniken im Simulation Core (Building, Production, Cash, Energy, Data, AI Manager, Focus Timer).
 - **Erlaubte Änderungen:** `packages/game-engine/`, `packages/progression-system/`, Event-Bus, State-Reducer.
 - **Grenzen:** Keine DOM- oder Svelte-Komponenten berühren; keine direkten SQL-Queries.
-- **Erforderliche Skills:** `typescript`, `idle-game-design`, `automated-testing`.
+- **Erforderliche Skills:** `idle-game-design`, `automated-testing`, `code-review` (plus Verbindlichkeit von `.agents/rules/typescript.md`).
 - **Qualitätsanforderungen:** 100 % Unit-Testabdeckung aller Gameplay-Methoden, reine Headless-Ausführbarkeit.
 - **Übergaberegeln:** Stellt typisierte Events und Commands für den Frontend Engineer bereit.
 
@@ -45,7 +45,7 @@ Dieses Dokument definiert das 14-köpfige autonome Spezialisten-Team von REALITY
 - **Aufgabenbereich:** SvelteKit 5 Benutzeroberfläche, reaktives State-Management, Komponentenbibliothek, Navigation.
 - **Erlaubte Änderungen:** `apps/game-client/`, `apps/admin-dashboard/`, `packages/ui-components/`, `packages/reality-sync/`.
 - **Grenzen:** Keine Modifikation der Core-Simulationsformeln; keine direkten DB-Zugriffe ohne API.
-- **Erforderliche Skills:** `sveltekit`, `frontend-architecture`, `typescript`, `mobile-optimization`.
+- **Erforderliche Skills:** `sveltekit`, `frontend-architecture`, `mobile-optimization` (plus Verbindlichkeit von `.agents/rules/typescript.md`).
 - **Qualitätsanforderungen:** 0 UI-Lag-Spikes, Svelte-Check fehlerfrei, mobile Barrierefreiheit.
 - **Übergaberegeln:** Bindet PixiJS-Canvas sauber ein und meldet Performance-Metriken an den Performance Engineer.
 
@@ -61,7 +61,7 @@ Dieses Dokument definiert das 14-köpfige autonome Spezialisten-Team von REALITY
 - **Aufgabenbereich:** API-Routen, autoritative Batch-Replay-Validierung, Authentifizierung und Session-Handling.
 - **Erlaubte Änderungen:** `apps/backend/`, Supabase Edge Functions (falls für Webhooks genutzt), Zod-Validierungsschemas.
 - **Grenzen:** Kein Verwenden des Service-Keys im Client-Code; keine ungeprüften Datenübernahmen.
-- **Erforderliche Skills:** `backend-security`, `supabase`, `typescript`.
+- **Erforderliche Skills:** `backend-security`, `supabase`, `code-review` (plus `.agents/rules/typescript.md`).
 - **Qualitätsanforderungen:** OWASP-Konformität, serverseitige Eingabevalidierung aller Payloads.
 - **Übergaberegeln:** Stellt typisierte Endpunkt-Verträge für das Frontend bereit.
 
@@ -77,7 +77,7 @@ Dieses Dokument definiert das 14-köpfige autonome Spezialisten-Team von REALITY
 - **Aufgabenbereich:** Integration externer LLM-Schnittstellen, In-Game AI-Agenten-Simulation, Prompt-Orchestrierung.
 - **Erlaubte Änderungen:** `packages/game-engine/src/ai/`, Model-Connectors, Prompt-Templates.
 - **Grenzen:** Keine ungedrosselten API-Aufrufe; keine Hardcoded API-Keys.
-- **Erforderliche Skills:** `agency-ai-engineer`, `backend-security`, `typescript`.
+- **Erforderliche Skills:** `agency-ai-engineer`, `backend-security`, `code-review` (plus `.agents/rules/typescript.md`).
 - **Qualitätsanforderungen:** Striktes Token- und Budget-Limit, Fallback auf lokale Simulation bei Offline-Betrieb.
 - **Übergaberegeln:** Übergibt KI-Eventströme an die Simulation Engine.
 

@@ -11,7 +11,7 @@ Das Projekt wird als modulares **`pnpm`-Workspace-Monorepo** organisiert (`pnpm-
 
 ```
 REALITY-CORP/
-├── .agent/                         # Lokale Antigravity Skills & Spiegel der Regeln
+├── .agent/                         # Lokale Antigravity Skills (19 Skills unter skills/)
 ├── .agents/                        # Primäre Antigravity Workspace Rules (13 Regelwerke)
 ├── .github/                        # CI/CD Workflows, PR- & Issue-Templates
 ├── apps/
@@ -97,7 +97,7 @@ flowchart TD
 
 | Modul | Verantwortung | Verbotene Abhängigkeiten |
 | :--- | :--- | :--- |
-| **`packages/shared-types`** | Branded Types (`RealityCash`, `ComputeFlops`, `EnergyWatts`, `DataShards`), Zod-Schemas, DTOs | Keine internen Pakete |
+| **`packages/shared-types`** | Branded Types (`RealityCash`, `ComputeFlops`, `EnergyKw`, `DataShards`, `EquityShares`), Zod-Schemas, DTOs | Keine internen Pakete |
 | **`packages/game-config`** | Balance-Tabellen für `apex-syndicate` (und gesperrte Configs für `chrono-forge`, `sovereign-island`) | Keine Runtime-Logik, kein DOM |
 | **`packages/economy-engine`** | `BigVal` Arithmetik, Kosten-/Ertragskurven, Energie-Load-Faktor, Prestige-Formel, analytischer Offline-Ertrag | Kein DOM, kein Network, kein UI |
 | **`packages/game-engine`** | Deterministische Simulation: Building, Production, Cash, Energy, Data, AI Manager, Focus Timer | Kein DOM, kein Svelte, kein PixiJS, kein Supabase |

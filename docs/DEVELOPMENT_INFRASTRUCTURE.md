@@ -29,8 +29,9 @@ Die Entwicklungsumgebung von *REALITY CORP* wurde für maximale Sicherheit, Repr
 ## 2. Git & Branching Konfiguration
 
 - **Repository Root:** `c:\Users\Daniel\Desktop\REALITY-CORP`
-- **Initialer Commit:** Hash `619d8ca` auf `main`.
-- **Aktiver Arbeitszweig:** `develop` (Clean working tree).
+- **Remote `origin`:** `https://github.com/danielnidinez-afk/reality-corp.git` (verbunden)
+- **Initialer Commit:** Hash `619d8ca` auf `main` / `origin/main`.
+- **Aktiver Arbeitszweig:** `develop` (lokale Weiterentwicklung ab Phase 05/06 zum Push bereit).
 - **Branch-Strategie:**
   - `main`: Nur für getaggte, produktionsreife Releases.
   - `develop`: Zentraler Integrationszweig.
@@ -67,17 +68,11 @@ Folgende Vorlagen und Richtlinien wurden hinterlegt:
 
 ## 5. Offene Freigaben & Nächste Schritte
 
-Für die vollständige Anbindung des externen GitHub-Remotes sind folgende Benutzerschritte erforderlich:
-1. **GitHub Remote anlegen:** Erstellung des privaten Repositories `reality-corp` unter https://github.com/new.
-2. **Git Remote URL verbinden:**
+Das private GitHub-Remote (`origin`) ist bereits verknüpft; für den laufenden CI/CD-Schutz sind noch folgende Benutzerschritte erforderlich:
+1. **Branch Protection auf GitHub aktivieren:** Schutzregeln für `main` und `develop` gemäß [`docs/GITHUB_WORKFLOW.md`](file:///c:/Users/Daniel/Desktop/REALITY-CORP/docs/GITHUB_WORKFLOW.md) in den Repository-Einstellungen einschalten.
+2. **Aktuellen `develop`-Stand pushen:**
    ```bash
-   git remote add origin git@github.com:danielnidinez-afk/reality-corp.git
-   # oder via HTTPS:
-   # git remote add origin https://github.com/danielnidinez-afk/reality-corp.git
+   git push origin develop
    ```
-3. **Initiale Branches pushen:**
-   ```bash
-   git push -u origin main
-   git push -u origin develop
-   ```
+3. **Optionale MCP-Plugins verknüpfen:** Supabase-MCP und GitHub-MCP nach Token-/Konto-Freigabe aktivieren.
 

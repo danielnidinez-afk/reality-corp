@@ -41,7 +41,7 @@ Lade diesen Skill, wenn:
 - **Testen von Implementierungsdetails:** Testen privater Variablen statt des beobachtbaren Verhaltens.
 
 ## 6. Prüfschritte
-- [ ] Werden alle Tests vor jedem Commit mit `npm run test` ausgeführt?
+- [ ] Werden alle Tests vor jedem Commit mit `pnpm test` ausgeführt?
 - [ ] Werden Savegames über einen round-trip Test (Serialize -> Deserialize -> Assert Deep Equal) validiert?
 - [ ] Werden Fehlerzustände (z.B. Netzwerk-Timeout beim Cloud-Sync) explizit getestet?
 

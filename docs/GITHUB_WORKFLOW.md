@@ -58,7 +58,7 @@ Die kontinuierliche Integrations-Pipeline führt bei jedem Push und PR auf `main
 
 ## 4. Branch Protection Rules (Soll-Konfiguration für GitHub)
 
-Sobald das Remote-Repository auf GitHub angelegt und verbunden ist, werden folgende Branch Protection Rules aktiviert:
+Das Remote-Repository ist über `origin` verbunden. Im GitHub Web-Interface (`Settings -> Branches`) müssen für `main` und `develop` folgende Branch Protection Rules aktiv geschaltet sein:
 
 ### Für `main`:
 - [x] **Require pull request before merging** (Mindestens 1 Approval).
@@ -66,12 +66,17 @@ Sobald das Remote-Repository auf GitHub angelegt und verbunden ist, werden folge
   - `Typecheck & Lint`
   - `Unit & Integration Tests`
   - `Build Integrity Verification`
+  - `Dependency Vulnerability Audit`
 - [x] **Do not allow bypassing the above settings.**
 - [x] **Require linear history** (Rebase / Squash).
 - [x] **Include administrators** (Regeln gelten auch für Owner/Admins).
 
 ### Für `develop`:
 - [x] **Require pull request before merging.**
-- [x] **Require status checks to pass before merging.**
+- [x] **Require status checks to pass before merging:**
+  - `Typecheck & Lint`
+  - `Unit & Integration Tests`
+  - `Build Integrity Verification`
+  - `Dependency Vulnerability Audit`
 - [x] **Require branches to be up to date before merging.**
 

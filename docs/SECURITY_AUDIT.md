@@ -41,7 +41,7 @@
 ### 2.3 Installierte Skills (`PASS`)
 - **Bestandsprüfung:** Alle 19 lokalen Skills in `.agent/skills/` wurden inventarisiert: 12 Eigenentwicklungen und 7 kuratierte/offizielle Skills (`supabase`, `supabase-postgres-best-practices`, `sveltekit`, `playwright`, `vitest`, `github-actions`, `capacitor`).
 - **Abhängigkeits- & Integritätsscan:** 0 Namensüberschneidungen mit global installierten Antigravity-Skills; keine ausführbaren `.sh`-, `.ps1`-, `.js`- oder Binary-Skripte in `.agent/skills/` gefunden; Regex-Scan auf `curl | bash`, `Invoke-Expression`, `rm -rf`, `eval(` ohne Treffer.
-- **Korrigierte Konsistenzlücke:** [`.agent/skills/game-economy/SKILL.md`](file:///c:/Users/Daniel/Desktop/REALITY-CORP/.agent/skills/game-economy/SKILL.md) wurde auf `BigVal` (`break_infinity.js`) vereinheitlicht.
+- **Korrigierte Konsistenzlücken:** [`game-economy/SKILL.md`](file:///c:/Users/Daniel/Desktop/REALITY-CORP/.agent/skills/game-economy/SKILL.md) auf `BigVal` (`break_infinity.js`) sowie [`automated-testing`](file:///c:/Users/Daniel/Desktop/REALITY-CORP/.agent/skills/automated-testing/SKILL.md), [`frontend-architecture`](file:///c:/Users/Daniel/Desktop/REALITY-CORP/.agent/skills/frontend-architecture/SKILL.md), [`github-actions`](file:///c:/Users/Daniel/Desktop/REALITY-CORP/.agent/skills/github-actions/SKILL.md) und [`release-audit`](file:///c:/Users/Daniel/Desktop/REALITY-CORP/.agent/skills/release-audit/SKILL.md) auf `pnpm`, Phase-05-Module und `pnpm audit --audit-level=high` vereinheitlicht.
 
 ### 2.4 Dependencies (`WARNING` / `BLOCKED` für Laufzeitaudit)
 - **Befund:** Vor Phase 07 existiert absichtlich noch keine Root-`package.json` und kein `pnpm-lock.yaml`. Eine automatisierte Schwachstellenprüfung laufender npm-Pakete (`pnpm audit`) ist daher aktuell **`BLOCKED`**.
@@ -60,22 +60,23 @@
   - Doppeltes Regelverzeichnis `.agent/rules/` gelöscht (kanonisch bleibt `.agents/rules/`).
   - Ungetrackten Phase-03-Codeentwurf `packages/` sowie leeren Branch `feat/core-engine-scaffold` (0 eigene Commits gegenüber `develop` und `origin/develop`) entfernt.
   - [`.gitattributes`](file:///c:/Users/Daniel/Desktop/REALITY-CORP/.gitattributes) erstellt (`* text=auto eol=lf`, Windows-Skripte `eol=crlf`), um CRLF/LF-Hash-Drift zu beseitigen.
+  - [`docs/GITHUB_WORKFLOW.md`](file:///c:/Users/Daniel/Desktop/REALITY-CORP/docs/GITHUB_WORKFLOW.md) um `Dependency Vulnerability Audit` (`security_audit`) als verpflichtenden Status-Check für `main` & `develop` ergänzt.
 - **Blocker Remote (`BLOCKED`):** Da `gh` CLI nicht installiert ist, konnten serverseitige Branch Protection Rules auf GitHub für `main` und `develop` sowie der aktuelle Remote-Sync-Stand nicht automatisiert überprüft werden.
 
 ### 2.7 Secrets (`PASS`)
-- Ein vollständiger Regex-Scan über alle Dateien des Workspace nach privaten Schlüsseln, `ghp_`/`github_pat_`-Tokens, `service_role`-Secrets, `sk_live_`-Keys und Connection Strings ergab **0 Treffer**.
+- Ein vollständiger Regex-Scan über alle Dateien des Workspace nach privaten Schlüsseln, `ghp_`/`github_pat_`-Tokens, `service_role`-Secrets, `sk_live_`-Keys und Connection Strings ergab **0 reale Secrets** (nur Platzhalter in `.env.example` und Dokumentationstext in diesem Audit).
 - [`.env.example`](file:///c:/Users/Daniel/Desktop/REALITY-CORP/.env.example) wurde erstellt und trennt klar zwischen öffentlichen Client-Schlüsseln (`PUBLIC_SUPABASE_URL`, `PUBLIC_SUPABASE_ANON_KEY`, `PUBLIC_API_BASE_URL`) und reinen Backend-Secrets (`SUPABASE_SERVICE_ROLE_KEY`, `DATABASE_POOLER_URL`), flankiert durch [`.agents/rules/backend-security.md`](file:///c:/Users/Daniel/Desktop/REALITY-CORP/.agents/rules/backend-security.md).
 
 ### 2.8 API-Sicherheit (`PASS` Spec / `BLOCKED` Runtime)
 - **Behobene Spezifikationslücken in [`docs/API_SPECIFICATION.md`](file:///c:/Users/Daniel/Desktop/REALITY-CORP/docs/API_SPECIFICATION.md):**
   1. `POST /v1/sync/batch` erzwingt nun `baseStateVersion` zur Optimistic-Concurrency-Absicherung und antwortet bei konkurrierender Änderung mit `409 CONFLICT_STATE_DIVERGENCE`.
   2. `POST /v1/analytics/batch` wurde von unauthentifiziert auf `authenticated`-Rate-Limit mit maximal 64 KB Payload-Größe beschränkt (Schutz vor Spam/DoS-Flutung).
-  3. Idempotente Käufe (`idempotencyKey`) und Reward-Claims (`UNIQUE(user_id, claim_key)` → `409 ALREADY_CLAIMED`) sowie Guild-Endpoints als Phase-2-Feature-Flag festgelegt.
+  3. Idempotente Käufe (`idempotencyKey`), Reward-Claims (`UNIQUE(user_id, claim_key)` → `409 ALREADY_CLAIMED`), atomarer Single-Completion-Lock (`WHERE id = $1 AND user_id = $2 AND status = 'active'`) gegen parallele Double-Boost-Race-Conditions auf `POST /v1/focus/complete` sowie Guild-Endpoints als Phase-2-Feature-Flag festgelegt.
 - **Runtime-Prüfung (`BLOCKED`):** Echte HTTP-Penetrationstests (Auth-Bypass, Payload-Fuzzing, Rate-Limit-Verifikation) folgen nach Implementierung von `apps/backend`.
 
 ### 2.9 Datenbankarchitektur (`PASS` Design / `BLOCKED` Live-DB)
 - **Kritischer Ursprungsbefund (`FAIL` behoben):**
-  1. In [`docs/DATABASE_DESIGN.md`](file:///c:/Users/Daniel/Desktop/REALITY-CORP/docs/DATABASE_DESIGN.md) und [`.agents/rules/backend-security.md`](file:///c:/Users/Daniel/Desktop/REALITY-CORP/.agents/rules/backend-security.md) war ein permissives `FOR ALL USING (false)` als Schreibschutz formuliert — in PostgreSQL können andere permissive Policies dies umgehen. Korrigiert zu **`AS RESTRICTIVE FOR ALL TO authenticated USING (true) WITH CHECK (false)`**.
+  1. In [`docs/DATABASE_DESIGN.md`](file:///c:/Users/Daniel/Desktop/REALITY-CORP/docs/DATABASE_DESIGN.md) und [`.agents/rules/backend-security.md`](file:///c:/Users/Daniel/Desktop/REALITY-CORP/.agents/rules/backend-security.md) war ein permissives `FOR ALL USING (false)` als Schreibschutz formuliert — in PostgreSQL können andere permissive Policies dies umgehen. Korrigiert zu **`AS RESTRICTIVE FOR ALL TO anon, authenticated USING (true) WITH CHECK (false)`** plus expliziter RLS-Vollabdeckung über alle Tabellen (inkl. `analytics_events` Lese-/Schreibsperre für `anon`/`authenticated`).
   2. Fehlende `REVOKE EXECUTE` Absicherung für `SECURITY DEFINER`-RPCs (`sync_world_batch`) ergänzt: `REVOKE EXECUTE ON FUNCTION sync_world_batch FROM PUBLIC, anon, authenticated; GRANT EXECUTE TO service_role;`.
   3. Performance-sicheres RLS-Pattern `(SELECT auth.uid()) = id` in den Governance-Regeln verankert.
 - **Blocker Live-DB (`BLOCKED`):** Docker Desktop ist gestoppt und noch kein Supabase-Projekt verknüpft; reale Migrationen und `pgTAP`/RLS-Checks können daher noch nicht ausgeführt werden.
@@ -105,3 +106,4 @@
 1. **GitHub Remote & Branch Protection:** `develop` durch den Benutzer pushen und Branch Protection Rules gemäß [`docs/GITHUB_WORKFLOW.md`](file:///c:/Users/Daniel/Desktop/REALITY-CORP/docs/GITHUB_WORKFLOW.md) im GitHub UI aktivieren (`main` + `develop`).
 2. **Erstes Lockfile & Audit:** Nach Erstellung von `package.json` und `pnpm-lock.yaml` in Phase 07 sofort `pnpm audit --audit-level=high` ausführen.
 3. **Live-Supabase-Härtung:** Vor erstem Cloud-Deployment RLS-Policies über automatisierte Integrationstests gegen einen aktiven Postgres/Supabase-Container (nach Start von Docker Desktop) verifizieren.
+

@@ -132,6 +132,7 @@ erDiagram
 - **`game_events`:** `id text PK`, `world_id text`, `title text`, `modifier_jsonb jsonb`, `starts_at timestamptz`, `ends_at timestamptz`, `is_active boolean`.
 - **`analytics_events`:** `id bigint GENERATED ALWAYS AS IDENTITY PK`, `anon_session_id uuid`, `world_id text`, `event_name text`, `props_jsonb jsonb`, `created_at timestamptz` (keine PII!).
 - **`audit_anomaly_logs`:** `id uuid PK`, `user_id uuid FK`, `world_id text`, `anomaly_type text`, `details_jsonb jsonb`, `created_at timestamptz` (**RLS: Vollständig gesperrt für `anon` und `authenticated`**; nur `service_role` darf schreiben/lesen).
+- **RLS-Vollabdeckung über sämtliche Tabellen:** `ENABLE ROW LEVEL SECURITY` ist auf allen öffentlichen Tabellen aktiv. Direkte Schreibzugriffe (`INSERT`/`UPDATE`/`DELETE`) über `anon`/`authenticated` werden auf Ökonomie-, Sync-, Claim-, Focus-, Leaderboard-, Event- und Analytics-Tabellen per `AS RESTRICTIVE` gesperrt; `analytics_events` ist auch für `SELECT` durch `anon`/`authenticated` gesperrt (Auswertung nur über `apps/backend` / `service_role`).
 
 ---
 

@@ -17,7 +17,7 @@ Lade diesen Skill, wenn:
 - Ein neuer Versions-Release (Patch, Minor, Major) vorbereitet wird.
 - Ein Release Candidate (RC) auditiert werden soll.
 - Changelogs, Release Notes oder Migrationsskripte verifiziert werden.
-- Produktions-Builds (`npm run build`, `capacitor sync`) auf Fehler geprüft werden.
+- Produktions-Builds (`pnpm build`, `capacitor sync`) auf Fehler geprüft werden.
 
 ## 3. Arbeitsablauf
 1. **Pre-Flight Sanity Check:**
@@ -25,12 +25,12 @@ Lade diesen Skill, wenn:
    - Wurden alle unfertigen Feature-Branches gemerged oder hinter Feature-Flags isoliert?
    - Sind alle Umgebungsvariablen für Produktion konfiguriert (Production Endpoints, CDN URLs)?
 2. **Automated Verification Pipeline:**
-   - Schritt 1: `npm run lint` & `npm run check` (Null Fehler).
-   - Schritt 2: `npm run test` (100 % grün).
-   - Schritt 3: `npm run build` (Erfolgreicher deterministischer Produktions-Build).
-   - Schritt 4: `npm run test:e2e` auf dem gebauten Produktions-Artefakt.
+   - Schritt 1: `pnpm lint` & `pnpm check` (Null Fehler).
+   - Schritt 2: `pnpm test` (100 % grün).
+   - Schritt 3: `pnpm build` (Erfolgreicher deterministischer Produktions-Build).
+   - Schritt 4: `pnpm test:e2e` auf dem gebauten Produktions-Artefakt.
 3. **Lizenz- & Dependency-Security-Audit:**
-   - Ausführung von `npm audit` (Keine kritischen oder hochgradigen Vulnerabilities).
+   - Ausführung von `pnpm audit --audit-level=high` (Keine kritischen oder hochgradigen Vulnerabilities).
    - Lizenz-Check aller Third-Party-Pakete: Nur permissive Lizenzen (MIT, Apache 2.0, BSD, ISC). Strikte Ablehnung von AGPL oder unklaren proprietären Lizenzen ohne Freigabe.
 4. **Savegame Compatibility Check:**
    - Teste, ob ein Savegame der vorherigen Version (`v(n-1)`) fehlerfrei in die neue Version (`v(n)`) migriert und geladen wird.
