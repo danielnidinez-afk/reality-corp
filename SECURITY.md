@@ -36,3 +36,4 @@ Wir bestätigen den Eingang innerhalb von 48 Stunden und koordinieren die Behebu
 - **Zero-Trust Datenbankzugriff:** Jede Tabelle verfügt über Row-Level Security (RLS).
 - **Keine Secrets im Git:** Git-Hooks und CI-Scans blockieren Commits mit API-Schlüsseln, Service-Role-Tokens oder Zertifikaten.
 - **Client-Sanitization:** Alle externen Nutzlasten werden vor der Verarbeitung strikt serverseitig via Zod validiert.
+

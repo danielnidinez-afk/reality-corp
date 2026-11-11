@@ -43,3 +43,4 @@ Im lokalen Antigravity-Profil sind folgende Server bereits registriert:
 ## 4. Richtlinien für Neuinstallationen
 - Externe MCP-Server werden erst nach Vorlage des Tokens und Freigabe durch den Benutzer aktiviert.
 - Für Supabase wird das offizielle `antigravity-plugins-partners/plugin/supabase` empfohlen, sobald das Supabase-Projekt angelegt ist.
+

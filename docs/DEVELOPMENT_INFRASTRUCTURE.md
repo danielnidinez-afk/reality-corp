@@ -80,3 +80,4 @@ Für die vollständige Anbindung des externen GitHub-Remotes sind folgende Benut
    git push -u origin main
    git push -u origin develop
    ```
+

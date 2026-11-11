@@ -86,3 +86,4 @@ Für Entwickler und KI-Agenten gilt strikt:
 
 ## 📄 Lizenz
 Proprietary – Alle Rechte vorbehalten. Copyright © 2026 REALITY CORP Projektteam.
+

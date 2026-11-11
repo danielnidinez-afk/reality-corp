@@ -74,3 +74,4 @@ Sobald das Remote-Repository auf GitHub angelegt und verbunden ist, werden folge
 - [x] **Require pull request before merging.**
 - [x] **Require status checks to pass before merging.**
 - [x] **Require branches to be up to date before merging.**
+
